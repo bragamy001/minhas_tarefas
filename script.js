@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const TASKS_PER_PAGE = 10; // Número máximo de tarefas por página
   let currentPage = 1; // Página inicial
   let allTasks = []; // Todas as tarefas carregadas
+  let taskBeingEdited = null; // Variável para armazenar a tarefa sendo editada
 
   // Função para carregar tarefas do LocalStorage
   function loadTasks() {
@@ -63,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     row.querySelector(".edit-btn").addEventListener("click", () => {
       document.getElementById("task-name").value = name;
       document.getElementById("task-deadline").value = deadline;
-      taskBeingEdited = task;
+      taskBeingEdited = task; // Define a tarefa como a que está sendo editada
     });
 
     row.querySelector(".delete-btn").addEventListener("click", () => {
@@ -158,10 +159,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (taskBeingEdited) {
-      const { name, row } = taskBeingEdited;
-      updateTaskInStorage(name, taskName, taskDeadline);
-      taskBeingEdited = null;
+      // Atualiza a tarefa existente no LocalStorage
+      updateTaskInStorage(taskBeingEdited.name, taskName, taskDeadline);
+      taskBeingEdited = null; // Reseta a variável de edição
     } else {
+      // Adiciona uma nova tarefa
       saveTask(taskName, taskDeadline, "Pendente");
     }
 
